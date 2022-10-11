@@ -36,6 +36,15 @@ jobs:
 workflows:
   test_and_deploy_my_app:
     jobs:
-      - install-and-test
-      - deploy
-      - build_deploy
+      - build:
+          filters:
+            branches:
+              ignore:
+                - master
+                - gh-pages
+      - deploy:
+          requires:
+            - build
+          filters:
+            branches:
+              only: develop
