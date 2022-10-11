@@ -2,6 +2,7 @@ version: 2.1
 
 orbs:
   node: circleci/node@5.0.3
+  orb-deploy: pagely/orb-deploy@1.0.0
 
 jobs:
   install-and-test:
@@ -23,7 +24,7 @@ jobs:
       - node/install-packages
       - run:
           name: Build << pipeline.git.branch >>
-          command: npx react-scripts build
+          command: npx react-scripts Build
 
 workflows:
   test_and_deploy_my_app:
