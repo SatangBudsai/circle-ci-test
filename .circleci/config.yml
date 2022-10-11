@@ -2,17 +2,9 @@ version: 2.1
 
 orbs:
   node: circleci/node@5.0.3
-  github-pages-orb: fernfernfern/github-pages-orb@0.0.10
+  gh-pages: sugarshin/gh-pages@1.0.1
 
 jobs:
-  build_deploy:
-    executor: gh-pages/default
-    steps:
-      - checkout
-      - run: ./build.sh
-      - gh-pages/deploy:
-          setup-git: true
-          ssh-fingerprints: <fingerprint>
   install-and-test:
     executor:
       name: node/default
@@ -38,4 +30,3 @@ workflows:
     jobs:
       - install-and-test
       - deploy
-      - build_deploy
