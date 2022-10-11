@@ -23,7 +23,7 @@ jobs:
       - node/install-packages
       - run:
           name: Build << pipeline.git.branch >>
-          command: react-scripts build
+          command: npx react-scripts build
 
 workflows:
   test_and_deploy_my_app:
