@@ -10,16 +10,12 @@ jobs:
       tag: "16.17"
     steps:
       - checkout
-      - node/install-packages:
-          pkg-manager: npm install
   test:
     executor:
       name: node/default
       tag: "16.17"
     steps:
       - checkout
-      - node/install-packages:
-          pkg-manager: npm install
       - run:
           name: Test << pipeline.git.branch >>
           command: npm run test
@@ -31,8 +27,6 @@ jobs:
       REPOURL: << pipeline.project.git_url >>
     steps:
       - checkout
-      - node/install-packages:
-          pkg-manager: npm install
       - run:
           name: Build << pipeline.git.branch >>
           command: PUBLIC_URL=/${CIRCLE_PROJECT_REPONAME} npm run build
