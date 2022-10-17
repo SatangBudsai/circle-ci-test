@@ -2,32 +2,70 @@ version: 2.1
 
 orbs:
   node: circleci/node@5.0.3
-  orbs:
-    deploy-orb: netgaintechnology/deploy-orb@0.0.61
 
 jobs:
-  install-and-test:
+  initial:
     executor:
       name: node/default
       tag: "16.17"
     steps:
       - checkout
-      - node/install-packages
+      - node/install-packages:
+          pkg-manager: yarn
+  test:
+    executor:
+      name: node/default
+      tag: "16.17"
+    steps:
+      - checkout
+      - node/install-packages:
+          pkg-manager: yarn
       - run:
-          command: npm run test
-          name: Run tests
+          name: Test << pipeline.git.branch >>
+          command: yarn run test
   deploy:
     executor:
       name: node/default
       tag: "16.17"
+    environment:
+      REPOURL: << pipeline.project.git_url >>
     steps:
       - checkout
-      - node/install-packages
+      - node/install-packages:
+          pkg-manager: yarn
       - run:
           name: Build << pipeline.git.branch >>
-          command: npx react-scripts Build
+          command: PUBLIC_URL=/${CIRCLE_PROJECT_REPONAME} yarn run build
+      - run:
+          name: Setup evironment variables
+          command: |
+            echo "export REPOPATH=${REPOURL#https://github.com}" >> "$BASH_ENV"
+      - run:
+          name: Setup git user
+          command: |
+            git config --global user.email "mrpachara@gmail.com"
+            git config --global user.name "Pachara Tinamas"
+      - run:
+          name: Setup Github token
+          command: |
+            echo ${CIRCLE_PROJECT_REPONAME}
+            echo ${CIRCLE_REPOSITORY_URL}
+            echo ${REPOURL}
+            echo ${REPOPATH}
+            git remote set-url origin https://git:${GITHUB_TOKEN}@github.com${REPOPATH}.git
+      - run:
+          name: Deploy to gh-pages
+          command: yarn run deploy
+
 workflows:
   test_and_deploy_my_app:
     jobs:
-      - deploy-orb/terraform_deploy
-  version: 2
+      - initial
+      - test:
+          requires:
+            - initial
+      - deploy:
+          requires:
+            - test
+          context:
+            - github-context
