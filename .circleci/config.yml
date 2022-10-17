@@ -55,7 +55,7 @@ jobs:
             git remote set-url origin https://git:${GITHUB_TOKEN}@github.com${REPOPATH}.git
       - run:
           name: Deploy to gh-pages
-          command: yarn run deploy
+          command: run deploy
 
 workflows:
   test_and_deploy_my_app:
