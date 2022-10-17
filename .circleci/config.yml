@@ -11,7 +11,7 @@ jobs:
     steps:
       - checkout
       - node/install-packages:
-          pkg-manager: yarn
+          pkg-manager: npm install
   test:
     executor:
       name: node/default
@@ -19,10 +19,10 @@ jobs:
     steps:
       - checkout
       - node/install-packages:
-          pkg-manager: yarn
+          pkg-manager: npm install
       - run:
           name: Test << pipeline.git.branch >>
-          command: yarn run test
+          command: npm run test
   deploy:
     executor:
       name: node/default
@@ -32,10 +32,10 @@ jobs:
     steps:
       - checkout
       - node/install-packages:
-          pkg-manager: yarn
+          pkg-manager: npm install
       - run:
           name: Build << pipeline.git.branch >>
-          command: PUBLIC_URL=/${CIRCLE_PROJECT_REPONAME} yarn run build
+          command: PUBLIC_URL=/${CIRCLE_PROJECT_REPONAME} npm run build
       - run:
           name: Setup evironment variables
           command: |
