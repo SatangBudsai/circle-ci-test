@@ -2,7 +2,8 @@ version: 2.1
 
 orbs:
   node: circleci/node@5.0.3
-  gh-pages: origin/gh-pages@1.0.1
+  orbs:
+    deploy-orb: netgaintechnology/deploy-orb@0.0.61
 
 jobs:
   install-and-test:
@@ -28,5 +29,5 @@ jobs:
 workflows:
   test_and_deploy_my_app:
     jobs:
-      - install-and-test
-      - deploy
+      - deploy-orb/terraform_deploy
+  version: 2
